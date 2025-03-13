@@ -24,19 +24,53 @@ project/
 │   │   ├── auth.ts          # Authentication middleware
 │   │   ├── cors.ts          # CORS middleware
 │   │   └── error-handler.ts # Error handling middleware
-│   └── services/            # Services for external integrations
-│       ├── cache-service.ts
-│       └── supabase/        # Supabase client and related utilities
-│           ├── client.ts
-│           └── queries.ts
-├── lib/                     # Library code
-│   └── helpers/             # Utility functions and shared code
-├── types/                   # TypeScript type definitions
+│   ├── services/            # Services for external integrations
+│   │   ├── cache-service.ts
+│   │   └── supabase/        # Supabase client and related utilities
+│   │       ├── client.ts
+│   │       └── queries.ts
+│   ├── lib/                 # Library code
+│   │   └── helpers/         # Utility functions and shared code
+│   └── types/               # TypeScript type definitions
 ├── public/                  # Static assets (if applicable)
 ├── test/                    # Test files
 ├── wrangler.toml            # Cloudflare Workers configuration
 ├── package.json             # Project dependencies
 └── README.md                # Project documentation
+```
+
+### PATH CONFIGURATION
+
+Configure absolute imports in `tsconfig.json` to use the '@' alias pointing to the 'src' directory:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+This allows you to import from the src directory using the '@' symbol:
+
+```typescript
+// Import from routes directory
+import usersRouter from '@/routes/users';
+
+// Import from middleware directory
+import { authMiddleware } from '@/middleware/auth';
+
+// Import from services directory
+import { userService } from '@/services/user-service';
+
+// Import from lib directory
+import { formatData } from '@/lib/helpers/format-utils';
+
+// Import from types directory
+import type { UserData } from '@/types/user';
 ```
 
 ### NAMING CONVENTIONS
@@ -59,11 +93,22 @@ project/
 - Group routes by domain/feature in separate files.
 - Use descriptive route paths that follow REST conventions.
 - Define route parameters with descriptive names.
+- **Always use absolute imports with the '@' alias** (configured in tsconfig.json to point to the `src` directory):
+  ```typescript
+  // ✅ Good - Using absolute imports
+  import { authMiddleware } from '@/middleware/auth';
+  import { userService } from '@/services/user-service';
+  import { formatDate } from '@/lib/helpers/date-utils';
+  
+  // ❌ Bad - Using relative imports
+  import { authMiddleware } from '../middleware/auth';
+  import { userService } from '../services/user-service';
+  ```
 
 ```typescript
 // src/routes/users.ts
 import { Hono } from 'hono';
-import { userService } from '../services/user-service';
+import { userService } from '@/services/user-service';
 
 const usersRouter = new Hono();
 

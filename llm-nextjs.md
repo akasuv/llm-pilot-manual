@@ -29,6 +29,37 @@ project
 └── public/                  # Static assets
 ```
 
+## PATH CONFIGURATION
+
+Configure absolute imports in `tsconfig.json` to use the '@' alias for cleaner imports:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+```
+
+This allows you to import from the project root using the '@' symbol:
+
+```typescript
+// Import from app directory
+import { SomeComponent } from '@/app/components/some-component';
+
+// Import from components directory
+import { Button } from '@/components/ui/button';
+
+// Import from lib directory
+import { formatDate } from '@/lib/utils/date-formatter';
+
+// Import from services directory
+import { supabaseClient } from '@/services/supabase/client';
+```
+
 ## NAMING CONVENTIONS
 
 1. **All Directories** (including React component directories): Use kebab-case for directories (e.g., `user-settings/`).
@@ -68,6 +99,17 @@ components/shared/data-table/
 3. Keep components focused and composable.
 4. Prioritize co-location of files that change together.
 5. For very large applications, consider route groups to further organize the codebase.
+6. **Always use absolute imports with the '@' alias** (configured in tsconfig.json):
+   ```typescript
+   // ✅ Good - Using absolute imports
+   import { Button } from '@/components/ui/button';
+   import { getUserById } from '@/lib/utils/users';
+   import { authService } from '@/services/supabase/auth';
+   
+   // ❌ Bad - Using relative imports
+   import { Button } from '../../../components/ui/button';
+   import { getUserById } from '../../lib/utils/users';
+   ```
 
 ## MIGRATION NOTES
 
