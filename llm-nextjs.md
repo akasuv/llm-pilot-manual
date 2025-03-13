@@ -10,6 +10,8 @@ project
 ├── app/                     # Next.js App Router root
 │   ├── api/                 # API routes
 │   ├── components/          # Components specific to root layout
+│   ├── page.tsx             # Root page component
+│   ├── layout.tsx           # Root layout component
 │   ├── [page]/              # Route groups (e.g., tools/, auth/)
 │   │   ├── components/      # Page-specific components
 │   │   ├── actions.ts       # Server actions for this route
@@ -20,7 +22,8 @@ project
 │   └── shared/              # Reusable feature components
 ├── lib/                     # Utility libraries
 │   ├── hooks/               # React hooks
-│   ├── utils/               # Utility functions
+│   └── utils/               # Utility functions
+├── services/                # External service integrations
 │   └── supabase/            # Database and API integrations
 ├── types/                   # TypeScript type definitions
 └── public/                  # Static assets
@@ -56,7 +59,7 @@ components/shared/data-table/
 
 1. **Server Actions**: Place page-specific server actions in `app/[page]/actions.ts`.
 2. **API Routes**: Place in `app/api/[route]/route.ts`.
-3. **Database Logic**: Place in `lib/supabase/` or appropriate data integration directory.
+3. **Database Logic**: Place in `services/supabase/` or appropriate data integration directory.
 
 ## BEST PRACTICES
 

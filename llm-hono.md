@@ -29,7 +29,8 @@ project/
 │       └── supabase/        # Supabase client and related utilities
 │           ├── client.ts
 │           └── queries.ts
-├── helpers/                 # Utility functions and shared code
+├── lib/                     # Library code
+│   └── helpers/             # Utility functions and shared code
 ├── types/                   # TypeScript type definitions
 ├── public/                  # Static assets (if applicable)
 ├── test/                    # Test files
