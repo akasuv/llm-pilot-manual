@@ -23,6 +23,12 @@ project
 ├── lib/                     # Utility libraries
 │   ├── hooks/               # React hooks
 │   └── utils/               # Utility functions
+├── middleware/              # Modular middleware components
+│   ├── auth.ts              # Authentication middleware
+│   ├── logging.ts           # Logging middleware
+│   ├── metrics.ts           # Metrics collection middleware
+│   └── index.ts             # Re-exports middleware components
+├── middleware.ts            # Main Next.js middleware entry point
 ├── services/                # External service integrations
 │   └── supabase/            # Database and API integrations
 ├── types/                   # TypeScript type definitions
@@ -59,6 +65,46 @@ import { formatDate } from '@/lib/utils/date-formatter';
 // Import from services directory
 import { supabaseClient } from '@/services/supabase/client';
 ```
+
+## MIDDLEWARE ORGANIZATION
+
+Next.js supports a special `middleware.ts` file at the root of your project that runs before requests are processed. While only one middleware.ts file is supported per project, you can still organize your middleware logic modularly:
+
+```typescript
+// middleware/auth.ts
+export function authMiddleware(req) {
+  // Authentication logic
+}
+
+// middleware/logging.ts
+export function loggingMiddleware(req) {
+  // Logging logic
+}
+
+// middleware/index.ts
+export { authMiddleware } from './auth';
+export { loggingMiddleware } from './logging';
+export { metricsMiddleware } from './metrics';
+
+// Root middleware.ts
+import { NextResponse } from 'next/server';
+import { authMiddleware, loggingMiddleware, metricsMiddleware } from './middleware';
+
+export function middleware(request) {
+  // Call modular middleware functions in order
+  authMiddleware(request);
+  loggingMiddleware(request);
+  metricsMiddleware(request);
+  
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/api/:path*', '/dashboard/:path*'],
+};
+```
+
+Note: While only one middleware.ts file is supported per project, you can still organize your middleware logic modularly. Break out middleware functionalities into separate .ts or .js files and import them into your main middleware.ts file. This allows for cleaner management of route-specific middleware, aggregated in the middleware.ts for centralized control. By enforcing a single middleware file, it simplifies configuration, prevents potential conflicts, and optimizes performance by avoiding multiple middleware layers.
 
 ## NAMING CONVENTIONS
 
